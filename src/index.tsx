@@ -1,23 +1,11 @@
-import * as React from 'react';
+import { useRef, useEffect } from 'react';
 
-export const useMyHook = () => {
-  let [{
-    counter
-  }, setState] = React.useState<{
-    counter: number;
-  }>({
-    counter: 0
-  });
+export function useMaintainedRef<T = any>(maintainedThing: T) {
+  const ref = useRef(maintainedThing);
 
-  React.useEffect(() => {
-    let interval = window.setInterval(() => {
-      counter++;
-      setState({counter})
-    }, 1000)
-    return () => {
-      window.clearInterval(interval);
-    };
-  }, []);
+  useEffect(() => {
+    ref.current = maintainedThing;
+  }, [maintainedThing]);
 
-  return counter;
-};
+  return ref;
+}

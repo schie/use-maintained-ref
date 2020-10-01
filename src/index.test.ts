@@ -1,29 +1,22 @@
-import { useMyHook } from './'
-import { renderHook, act } from "@testing-library/react-hooks";
+import { useMaintainedRef } from './';
+import { renderHook, act } from '@testing-library/react-hooks';
 
-// mock timer using jest
-jest.useFakeTimers();
-
-describe('useMyHook', () => {
-  it('updates every second', () => {
-    const { result } = renderHook(() => useMyHook());
-
-    expect(result.current).toBe(0);
-
-    // Fast-forward 1sec
-    act(() => {
-      jest.advanceTimersByTime(1000);
+describe('useMaintainedRef', () => {
+  it('ensures that ref stays up to date w/ prop', () => {
+    const initialValue = Math.random();
+    const { result, rerender } = renderHook(({ value }) => useMaintainedRef(value), {
+      initialProps: { value: initialValue },
     });
 
-    // Check after total 1 sec
-    expect(result.current).toBe(1);
+    expect(result.current.current).toBe(initialValue);
 
-    // Fast-forward 1 more sec
+    // rerender w/ new value
+    let nextValue = Math.random();
     act(() => {
-      jest.advanceTimersByTime(1000);
+      rerender({ value: nextValue });
     });
 
-    // Check after total 2 sec
-    expect(result.current).toBe(2);
-  })
-})
+    // Check after rerender
+    expect(result.current.current).toBe(nextValue);
+  });
+});
