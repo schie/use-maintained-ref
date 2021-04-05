@@ -1,4 +1,4 @@
-import { useMaintainedRef } from './';
+import { useMaintainedRef } from '../src';
 import { renderHook, act } from '@testing-library/react-hooks';
 
 describe('useMaintainedRef', () => {
