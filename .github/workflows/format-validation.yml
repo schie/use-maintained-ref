@@ -1,0 +1,21 @@
+name: formatting validating
+on:
+  pull_request:
+    branches:
+      - master
+      - development
+jobs:
+  prettier-check:
+    name: Confirming format is valid for standard
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2.1.5
+        with:
+          node-version: '14'
+      - name: validate formatting
+        run: npx prettier --check "**/**/*.js|**/**/*.ts"
+
